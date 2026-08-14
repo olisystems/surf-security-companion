@@ -73,10 +73,16 @@ test.describe('SOC acceptance flow', () => {
 
   test('tenant isolation — a DSO cannot see another tenant’s data', async ({ page }) => {
     await login(page, 'dirk.dso'); // tenant vnb-saar
+    // Tokens live in-memory only (lib/oidc.ts) — capture the real Authorization
+    // header from an app API call instead of reading any browser storage.
+    const apiRequest = page.waitForRequest(
+      (r) => r.url().includes('/api/') && Boolean(r.headers()['authorization']),
+    );
     await page.getByRole('link', { name: 'Alerts', exact: true }).click();
+    const authorization = (await apiRequest).headers()['authorization']!;
     // Attempt to force another tenant via the query param; backend must ignore/deny.
     const response = await page.request.get('/api/alerts?tenant=vnb-pfalz', {
-      headers: { authorization: `Bearer ${await page.evaluate(() => sessionStorage.getItem('e2e-token') ?? '')}` },
+      headers: { authorization },
     });
     expect([403, 200]).toContain(response.status());
     if (response.status() === 200) {
