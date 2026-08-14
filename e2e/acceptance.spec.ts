@@ -12,7 +12,7 @@ import { login } from './helpers/auth';
 test.describe('SOC acceptance flow', () => {
   test('analyst sees seeded alerts firing from all rule families', async ({ page }) => {
     await login(page, 'anna.analyst');
-    await page.getByRole('link', { name: 'Alerts' }).click();
+    await page.getByRole('link', { name: 'Alerts', exact: true }).click();
     await expect(page.getByRole('cell', { name: /brute-force|curtailment|unsigned/i }).first()).toBeVisible();
   });
 
@@ -73,7 +73,7 @@ test.describe('SOC acceptance flow', () => {
 
   test('tenant isolation — a DSO cannot see another tenant’s data', async ({ page }) => {
     await login(page, 'dirk.dso'); // tenant vnb-saar
-    await page.getByRole('link', { name: 'Alerts' }).click();
+    await page.getByRole('link', { name: 'Alerts', exact: true }).click();
     // Attempt to force another tenant via the query param; backend must ignore/deny.
     const response = await page.request.get('/api/alerts?tenant=vnb-pfalz', {
       headers: { authorization: `Bearer ${await page.evaluate(() => sessionStorage.getItem('e2e-token') ?? '')}` },
