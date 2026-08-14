@@ -1,0 +1,74 @@
+# Production overlay — security.surf.saarland (SURF VPS2, 178.105.200.25).
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# What this overlay changes vs. the dev compose:
+#   * Caddy terminates public TLS (ACME/Let's Encrypt) on 80/443 and proxies to
+#     the companion nginx (whose self-signed cert stays internal-only).
+#   * The bundled Keycloak (start-dev + H2) is NOT started — the IdP is our
+#     production Keycloak at auth.surf.saarland, realm `surf-security`
+#     (imported there via kcadm; see docs/DEPLOY_VPS2.md).
+#   * Every other published port is removed. Docker bypasses ufw, so NOT
+#     publishing is the actual protection for OpenSearch/Grafana/MinIO/etc.
+#     (OpenSearch 9200 will be re-exposed to the SURF-VPS IP only, once the
+#     log shippers land — not before.)
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile.prod:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      nginx:
+        condition: service_healthy
+
+  nginx:
+    ports: !override []
+    volumes: !override
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/certs:ro
+    depends_on: !override
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+
+  # Bundled dev IdP — never started in prod (profile is not activated).
+  keycloak:
+    profiles: ["bundled-idp"]
+
+  backend:
+    depends_on: !override
+      postgres:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      sigma-compiler:
+        condition: service_completed_successfully
+
+  opensearch:
+    ports: !override []
+  opensearch-dashboards:
+    ports: !override []
+  wazuh-manager:
+    ports: !override []
+  minio:
+    ports: !override []
+  otel-collector:
+    ports: !override []
+  prometheus:
+    ports: !override []
+  grafana:
+    ports: !override []
+
+volumes:
+  caddy-data:
+  caddy-config:

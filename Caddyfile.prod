@@ -1,0 +1,13 @@
+# Public TLS terminator for security.surf.saarland (VPS2).
+# ACME (Let's Encrypt) via HTTP-01 on :80 — Caddy handles this automatically.
+# The companion nginx keeps its self-signed cert for the internal hop only.
+security.surf.saarland {
+	reverse_proxy https://nginx:443 {
+		transport http {
+			tls
+			tls_insecure_skip_verify
+		}
+		header_up Host {host}
+		header_up X-Forwarded-Proto https
+	}
+}
