@@ -11,7 +11,10 @@ export async function login(page: Page, username: string, password = 'Surf-Demo-
 
   await page.waitForURL(/\/realms\/surf-security\/protocol\/openid-connect\/auth/);
   await page.getByLabel(/username|email/i).fill(username);
-  await page.getByLabel(/password/i).fill(password);
+  // getByRole('textbox') instead of getByLabel: Keycloak 26 login themes with a
+  // show-password toggle expose a second element whose aria-label also matches
+  // /password/i, which trips Playwright's strict mode.
+  await page.getByRole('textbox', { name: /password/i }).fill(password);
   await page.getByRole('button', { name: /sign in|log in/i }).click();
 
   // OTP step (if the account has completed enrolment in the seeded realm)
