@@ -280,10 +280,18 @@ export class PlaybookService {
   }
 
   private async pageForApproval(run: PlaybookRun): Promise<void> {
-    await this.pager.page(
-      `Playbook ${run.playbook} awaiting four-eyes approval (${run.targetCount} targets)`,
-      'warning',
-      { runId: run.id, actor: run.actor, reason: run.reason, dryRun: run.dryRun },
-    );
+    // Paging is best-effort: the run is already parked in REQUESTED and remains
+    // approvable in the UI. A pager outage (or an unconfigured routing key) must
+    // not turn the request into a 5xx after the state change was persisted; the
+    // ResilientHttpClient has already logged the delivery failure.
+    try {
+      await this.pager.page(
+        `Playbook ${run.playbook} awaiting four-eyes approval (${run.targetCount} targets)`,
+        'warning',
+        { runId: run.id, actor: run.actor, reason: run.reason, dryRun: run.dryRun },
+      );
+    } catch {
+      /* logged by the http client */
+    }
   }
 }
