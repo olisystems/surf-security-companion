@@ -25,6 +25,9 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
 
 ⚠ `VITE_*`-Variablen sind Build-Zeit: nach Änderung `... build frontend` nötig.
+⚠ **Nach jedem Recreate von `backend` oder `frontend`: `... restart nginx`** — nginx
+löst die `upstream`-Hostnamen nur beim Start auf; ein neuer Container = neue IP =
+nginx-502 bei intaktem Backend (Caddy selbst dialt per Request, braucht keinen Restart).
 ⚠ Bootstrap (Realm/OpenSearch/MinIO/Sigma) greift nur auf leeren Volumes —
 Fehlkonfiguration ⇒ `down -v` und neu.
 
