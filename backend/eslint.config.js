@@ -7,7 +7,9 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   {
     languageOptions: {
-      parserOptions: { projectService: true },
+      // Type-aware linting over src AND test: tsconfig.json only includes src
+      // (rootDir for the build), so the project service cannot see test files.
+      parserOptions: { project: './tsconfig.eslint.json', tsconfigRootDir: import.meta.dirname },
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',

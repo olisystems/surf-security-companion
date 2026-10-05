@@ -1,7 +1,7 @@
 # SURF Security Companion
 
 A KRITIS-grade Security Operations Centre (SOC) portal for the SURF energy-flexibility platform.
-Centralised log visibility, 15 MITRE ATT&CK-mapped correlation rules (Sigma → Wazuh), case
+Centralised log visibility, 20 MITRE ATT&CK-mapped correlation rules (Sigma → Wazuh), case
 management, safe-mode SOAR playbooks, NIS2/KRITIS/GDPR reporting, and cryptographic log
 integrity (hourly signed Merkle rollups + WORM audit exports) — all behind Keycloak OIDC
 with PKCE and WebAuthn/OTP MFA.
@@ -20,7 +20,7 @@ Verified at build time (no Docker required):
 | Backend `tsc --noEmit` | ✅ clean |
 | Frontend `tsc --noEmit` + `vite build` | ✅ clean (Mermaid chunk-size advisory only) |
 | Vitest unit + rule tests | ✅ 76 passing |
-| All 15 Sigma rules: schema-valid, positive-match, negative-reject | ✅ pass |
+| All 20 Sigma rules: schema-valid, positive-match, negative-reject | ✅ pass |
 | Sigma → Wazuh XML compile | ✅ pass |
 | NIS2 `.docx` rendering (docxtemplater) | ✅ pass |
 
@@ -72,7 +72,7 @@ cp .env.example .env                  # adjust passwords before anything non-loc
 npm install                           # host tooling for seed/verify scripts
 ./scripts/gen-dev-certs.sh            # self-signed TLS for nginx + opensearch (dev only)
 docker compose up -d --build
-OPENSEARCH_URL=https://localhost:9200 npm run seed   # demo events so all 15 rules fire
+OPENSEARCH_URL=https://localhost:9200 npm run seed   # demo events so the 15 seeded scenarios (R-01…R-15) fire
 ```
 
 First start takes a few minutes (Keycloak realm import, OpenSearch bootstrap, Sigma→Wazuh

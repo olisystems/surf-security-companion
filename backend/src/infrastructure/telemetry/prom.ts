@@ -48,6 +48,13 @@ export class Metrics {
     registers: [this.registry],
   });
 
+  readonly ingestEvents = new Counter({
+    name: 'surf_ingest_events_total',
+    help: 'Events received on POST /ingest/events by observer.product and outcome',
+    labelNames: ['product', 'outcome'] as const,
+    registers: [this.registry],
+  });
+
   constructor() {
     collectDefaultMetrics({ register: this.registry });
   }

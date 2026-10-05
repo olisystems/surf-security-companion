@@ -1,0 +1,41 @@
+title: HEMS device token brute-force
+id: 00ea4f54-86d4-49ae-82e9-43ecb5c0e7f5
+status: test
+description: >
+  Detects more than 30 HTTP 401 responses on a HEMS-Lite Control channel
+  (hems.surf.saarland/{serial}_plim_consumption/Control) from one source IP
+  within 5 minutes. A legitimate AMPERIX polls with a valid device token; a
+  sustained 401 stream means token guessing, a revoked token still deployed on
+  a device, or an unknown client probing device channels. Real incident: from
+  2026-10-02 an unknown client (79.198.160.48) polled APX…_plim_consumption/Control
+  every 30 s with an invalid token and was only found by a manual grep of the
+  Caddy access log — this rule makes that visible within one scheduler tick.
+author: SURF Detection Team
+date: 2026/10/05
+references:
+  - https://attack.mitre.org/techniques/T1110/001/
+  - https://attack.mitre.org/techniques/T1110/
+tags:
+  - attack.credential_access
+  - attack.t1110.001
+  - surf.threat.HEMS-01
+  - nis2.art.21.2.b
+level: medium
+logsource:
+  product: caddy
+  service: hems
+detection:
+  selection:
+    http.response.status_code: 401
+    url.path|contains: '/Control'
+  timeframe: 5m
+  condition: selection | count() by source.ip > 30
+falsepositives:
+  - Device token rotated in the portal but not yet updated in the AMPERIX poll entry (self-heals once the device is reconfigured)
+  - Field-test commissioning where a device is deliberately polled before its token is issued
+owner: detection-team@surf
+surf.compliance:
+  - "NIS2 Art. 21(2)(b)"
+  - "IEC 62443-3-3 FR1.1"
+  - "KRITIS §8a BSIG"
+  - "ISO 27001 A.8.5"

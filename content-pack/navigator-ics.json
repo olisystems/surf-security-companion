@@ -1,12 +1,12 @@
 {
-  "name": "SURF KRITIS Detection Pack 2026.07.1 (ICS)",
+  "name": "SURF KRITIS Detection Pack 2026.10.1 (ICS)",
   "versions": {
     "attack": "14",
     "navigator": "4.9.1",
     "layer": "4.5"
   },
   "domain": "ics-attack",
-  "description": "MITRE ATT&CK coverage for SURF KRITIS Detection Pack 2026.07.1 — generated from /rules tags.",
+  "description": "MITRE ATT&CK coverage for SURF KRITIS Detection Pack 2026.10.1 — generated from /rules tags.",
   "techniques": [
     {
       "techniqueID": "T0813",

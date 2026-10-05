@@ -1,11 +1,19 @@
 {
   "enterprise": [
     {
+      "techniqueID": "T1021.004",
+      "domain": "enterprise-attack",
+      "rules": [
+        "R-19"
+      ]
+    },
+    {
       "techniqueID": "T1078",
       "domain": "enterprise-attack",
       "rules": [
         "R-02",
-        "R-15"
+        "R-15",
+        "R-19"
       ]
     },
     {
@@ -13,6 +21,13 @@
       "domain": "enterprise-attack",
       "rules": [
         "R-05"
+      ]
+    },
+    {
+      "techniqueID": "T1098",
+      "domain": "enterprise-attack",
+      "rules": [
+        "R-20"
       ]
     },
     {
@@ -26,7 +41,22 @@
       "techniqueID": "T1110",
       "domain": "enterprise-attack",
       "rules": [
-        "R-01"
+        "R-01",
+        "R-17"
+      ]
+    },
+    {
+      "techniqueID": "T1110.001",
+      "domain": "enterprise-attack",
+      "rules": [
+        "R-16"
+      ]
+    },
+    {
+      "techniqueID": "T1110.004",
+      "domain": "enterprise-attack",
+      "rules": [
+        "R-18"
       ]
     },
     {
@@ -107,7 +137,10 @@
       "tactic": "credential_access",
       "rules": [
         "R-01",
-        "R-03"
+        "R-03",
+        "R-16",
+        "R-17",
+        "R-18"
       ]
     },
     {
@@ -126,7 +159,8 @@
       "tactic": "initial_access",
       "rules": [
         "R-02",
-        "R-05"
+        "R-05",
+        "R-19"
       ]
     },
     {
@@ -139,7 +173,8 @@
       "tactic": "persistence",
       "rules": [
         "R-12",
-        "R-13"
+        "R-13",
+        "R-20"
       ]
     }
   ],
@@ -151,8 +186,8 @@
     "R-11"
   ],
   "totals": {
-    "rules": 15,
-    "enterpriseTechniques": 9,
+    "rules": 20,
+    "enterpriseTechniques": 13,
     "icsTechniques": 4,
     "tactics": 7
   }

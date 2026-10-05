@@ -20,7 +20,7 @@ with a technique but no tactic tag shows up as a content gap. Changing tags mean
 
 ## Supported detection grammar
 
-The evaluator implements a deliberate subset of Sigma (everything the 15 rules need). Adding
+The evaluator implements a deliberate subset of Sigma (everything the 20 rules need). Adding
 a construct beyond this list means extending `src/correlation/evaluator.ts` **with tests**.
 
 ```
@@ -34,6 +34,9 @@ condition: (sel_a | count() by <field> >= N) and sel_b     # MFA-fatigue style
 
 Field matchers: exact value, list (`in`), `|contains` (substring), and `|contains` with a
 list (contains-any). `timeframe: <n>[smhd]` bounds aggregated conditions.
+`|startswith`, `|endswith` and `|re` are **not** supported by either evaluator (portal or Wazuh
+compiler) — use `|contains` (R-17 matches `/external/v1/` by substring for exactly that reason).
+List values use Sigma `in` semantics in both evaluators (`[401, 403]`, `[a, b, c]`).
 
 ## Wazuh rule id block
 
@@ -45,12 +48,12 @@ never collide with a primary. The converter fails closed if any id is duplicated
 ## Workflow
 
 ```bash
-# 1. author rules/R-16-my-rule.yml (copy an existing rule)
+# 1. author rules/R-21-my-rule.yml (copy an existing rule)
 # 2. validate against the schema
 npm run rules:validate
 # 3. add fixtures
-#    backend/test/fixtures/events/R-16/positive.json   (must match)
-#    backend/test/fixtures/events/R-16/negative.json   (must NOT match)
+#    backend/test/fixtures/events/R-21/positive.json   (must match)
+#    backend/test/fixtures/events/R-21/negative.json   (must NOT match)
 # 4. run the fixture gate
 npm run test:rules
 # 5. preview the compiled Wazuh XML

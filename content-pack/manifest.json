@@ -1,9 +1,9 @@
 {
   "name": "SURF KRITIS Detection Pack",
-  "version": "2026.07.1",
-  "generatedAt": "2026-07-17T16:55:26.260Z",
-  "ruleCount": 15,
-  "contentHash": "30951d5bc9fa30cfdf0b336f5e05c5be396aea474cca98e76184eebdb6bffe88",
+  "version": "2026.10.1",
+  "generatedAt": "2026-10-05T12:29:27.268Z",
+  "ruleCount": 20,
+  "contentHash": "21a86bfd80035c90d2b04d0eae56c5a76a31c0f57fe140ba0d88a4e21baab695",
   "rules": [
     {
       "fileId": "R-01",
@@ -248,6 +248,90 @@
         "lateral_movement"
       ],
       "threatId": "AV-09",
+      "complianceCount": 4
+    },
+    {
+      "fileId": "R-16",
+      "id": "00ea4f54-86d4-49ae-82e9-43ecb5c0e7f5",
+      "title": "HEMS device token brute-force",
+      "level": "medium",
+      "status": "test",
+      "enabled": true,
+      "enterprise": [
+        "T1110.001"
+      ],
+      "ics": [],
+      "tactics": [
+        "credential_access"
+      ],
+      "complianceCount": 4
+    },
+    {
+      "fileId": "R-17",
+      "id": "b082baac-f034-454f-b750-665294692287",
+      "title": "Partner API key failures",
+      "level": "medium",
+      "status": "test",
+      "enabled": true,
+      "enterprise": [
+        "T1110"
+      ],
+      "ics": [],
+      "tactics": [
+        "credential_access"
+      ],
+      "threatId": "AV-05",
+      "complianceCount": 4
+    },
+    {
+      "fileId": "R-18",
+      "id": "b41669c2-2b7c-4f13-92ec-fc34f786833b",
+      "title": "Keycloak login failures by source IP",
+      "level": "high",
+      "status": "test",
+      "enabled": true,
+      "enterprise": [
+        "T1110.004"
+      ],
+      "ics": [],
+      "tactics": [
+        "credential_access"
+      ],
+      "threatId": "AV-01",
+      "complianceCount": 4
+    },
+    {
+      "fileId": "R-19",
+      "id": "a1583aaa-46ba-4824-a6ee-33d4e6e15207",
+      "title": "SSH login from unknown source",
+      "level": "low",
+      "status": "test",
+      "enabled": true,
+      "enterprise": [
+        "T1021.004",
+        "T1078"
+      ],
+      "ics": [],
+      "tactics": [
+        "initial_access"
+      ],
+      "threatId": "AV-09",
+      "complianceCount": 4
+    },
+    {
+      "fileId": "R-20",
+      "id": "8cbe8ee8-c83c-4bae-a59a-6a3294e9d705",
+      "title": "HEMS device token lifecycle",
+      "level": "informational",
+      "status": "test",
+      "enabled": true,
+      "enterprise": [
+        "T1098"
+      ],
+      "ics": [],
+      "tactics": [
+        "persistence"
+      ],
       "complianceCount": 4
     }
   ]

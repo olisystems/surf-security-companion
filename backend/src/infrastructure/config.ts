@@ -94,6 +94,21 @@ const configSchema = z.object({
     requireStepUp: boolFromString.default('true'),
   }),
 
+  ingest: z.object({
+    // Static bearer token for the log-shipper write path (POST /ingest/events).
+    // Unset → the route registers but answers 503 INGEST_DISABLED.
+    token: z.string().min(32).optional(),
+    sourceLabel: z.string().min(1).max(64).default('vector'),
+    defaultTenantId: z.string().min(1).max(64).default('vnb-saar'),
+    maxBatch: z.coerce.number().int().min(1).max(5000).default(500),
+  }),
+
+  enrichment: z.object({
+    // JSON file with the ReferenceConfig shape; merged over the demo defaults
+    // per top-level key. Unset → demo reference data only.
+    referencePath: z.string().min(1).optional(),
+  }),
+
   rulesDir: z.string().default('/rules'),
   presignExpirySeconds: z.coerce.number().int().default(3600),
 });
@@ -164,6 +179,15 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
       massActionThreshold: env['PLAYBOOK_MASS_ACTION_THRESHOLD'],
       requireStepUp: env['PLAYBOOK_REQUIRE_STEPUP'],
     },
+    ingest: {
+      token: env['INGEST_TOKEN'] || undefined,
+      sourceLabel: env['INGEST_SOURCE_LABEL'],
+      defaultTenantId: env['INGEST_DEFAULT_TENANT_ID'],
+      maxBatch: env['INGEST_MAX_BATCH'],
+    },
+    enrichment: {
+      referencePath: env['ENRICHMENT_REFERENCE_PATH'] || undefined,
+    },
     rulesDir: env['RULES_DIR'],
     presignExpirySeconds: env['PRESIGN_EXPIRY_SECONDS'],
   });
@@ -185,5 +209,6 @@ export function secretValues(config: AppConfig): string[] {
     config.upstream.flexApiToken,
     config.upstream.emsApiToken,
     config.alerting.pagerdutyRoutingKey,
+    config.ingest.token ?? '',
   ].filter((v) => v.length > 0);
 }

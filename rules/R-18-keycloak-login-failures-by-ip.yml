@@ -1,0 +1,40 @@
+title: Keycloak login failures by source IP
+id: b41669c2-2b7c-4f13-92ec-fc34f786833b
+status: test
+description: >
+  Detects more than 20 failed Keycloak logins (LOGIN_ERROR, outcome failure)
+  from one source IP within 10 minutes, regardless of which usernames were
+  tried. R-01 counts failures per user and catches password guessing against
+  one account; this rule catches credential stuffing and user enumeration,
+  where one address sprays many accounts with few attempts each and never
+  trips the per-user threshold.
+author: SURF Detection Team
+date: 2026/10/05
+references:
+  - https://attack.mitre.org/techniques/T1110/004/
+  - https://www.keycloak.org/docs/latest/server_admin/#password-guess-brute-force-attacks
+tags:
+  - attack.credential_access
+  - attack.t1110.004
+  - surf.threat.AV-01
+  - nis2.art.21.2.b
+level: high
+logsource:
+  product: keycloak
+  service: events
+detection:
+  selection:
+    event.action: LOGIN_ERROR
+    event.outcome: failure
+  timeframe: 10m
+  condition: selection | count() by source.ip > 20
+falsepositives:
+  - Shared egress NAT of a large office where many users mistype passwords at once (raise the threshold per tenant)
+  - Load tests against non-production realms (filter by realm name)
+owner: detection-team@surf
+surf.threat_id: AV-01
+surf.compliance:
+  - "NIS2 Art. 21(2)(b)"
+  - "IEC 62443-3-3 FR1.1"
+  - "KRITIS §8a BSIG"
+  - "ISO 27001 A.8.5"

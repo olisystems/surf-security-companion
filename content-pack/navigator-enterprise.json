@@ -1,17 +1,24 @@
 {
-  "name": "SURF KRITIS Detection Pack 2026.07.1 (Enterprise)",
+  "name": "SURF KRITIS Detection Pack 2026.10.1 (Enterprise)",
   "versions": {
     "attack": "14",
     "navigator": "4.9.1",
     "layer": "4.5"
   },
   "domain": "enterprise-attack",
-  "description": "MITRE ATT&CK coverage for SURF KRITIS Detection Pack 2026.07.1 — generated from /rules tags.",
+  "description": "MITRE ATT&CK coverage for SURF KRITIS Detection Pack 2026.10.1 — generated from /rules tags.",
   "techniques": [
     {
+      "techniqueID": "T1021.004",
+      "score": 1,
+      "comment": "R-19: SSH login from unknown source",
+      "enabled": true,
+      "color": ""
+    },
+    {
       "techniqueID": "T1078",
-      "score": 2,
-      "comment": "R-02: Impossible-travel login for VNB user\nR-15: DB access from IP outside allow-list",
+      "score": 3,
+      "comment": "R-02: Impossible-travel login for VNB user\nR-15: DB access from IP outside allow-list\nR-19: SSH login from unknown source",
       "enabled": true,
       "color": ""
     },
@@ -19,6 +26,13 @@
       "techniqueID": "T1078.004",
       "score": 1,
       "comment": "R-05: JWT signature validation failure spike",
+      "enabled": true,
+      "color": ""
+    },
+    {
+      "techniqueID": "T1098",
+      "score": 1,
+      "comment": "R-20: HEMS device token lifecycle",
       "enabled": true,
       "color": ""
     },
@@ -31,8 +45,22 @@
     },
     {
       "techniqueID": "T1110",
+      "score": 2,
+      "comment": "R-01: Keycloak brute-force login\nR-17: Partner API key failures",
+      "enabled": true,
+      "color": ""
+    },
+    {
+      "techniqueID": "T1110.001",
       "score": 1,
-      "comment": "R-01: Keycloak brute-force login",
+      "comment": "R-16: HEMS device token brute-force",
+      "enabled": true,
+      "color": ""
+    },
+    {
+      "techniqueID": "T1110.004",
+      "score": 1,
+      "comment": "R-18: Keycloak login failures by source IP",
       "enabled": true,
       "color": ""
     },
@@ -78,7 +106,7 @@
       "#1b5e20"
     ],
     "minValue": 0,
-    "maxValue": 2
+    "maxValue": 3
   },
   "legendItems": [],
   "hideDisabled": true

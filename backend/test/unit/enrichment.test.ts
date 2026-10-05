@@ -202,6 +202,14 @@ describe('R-15 · ip_allowlisted', () => {
     });
     expect('surf.enrichment.ip_allowlisted' in out).toBe(false);
   });
+
+  it('is also computed for sshd logins (R-19) — false off-list, true on-list', () => {
+    const { enrich } = makeEnricher();
+    const off = enrich({ 'event.action': 'ssh_login', 'event.outcome': 'success', 'user.name': 'root', 'source.ip': '203.0.113.9' });
+    expect(off['surf.enrichment.ip_allowlisted']).toBe(false);
+    const on = enrich({ 'event.action': 'ssh_login', 'event.outcome': 'success', 'user.name': 'root', 'source.ip': '192.168.1.5' });
+    expect(on['surf.enrichment.ip_allowlisted']).toBe(true);
+  });
 });
 
 describe('pass-through', () => {

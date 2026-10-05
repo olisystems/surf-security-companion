@@ -22,6 +22,7 @@ Exposed at `/metrics`. Named series (see `infrastructure/telemetry/prom.ts`):
 | `surf_playbook_runs_total` | counter | playbook, status |
 | `surf_hashchain_rollups_total` | counter | outcome |
 | `surf_tenant_scope_denials_total` | counter | — |
+| `surf_ingest_events_total` | counter | product, outcome |
 
 ## Logs (Pino → Loki)
 

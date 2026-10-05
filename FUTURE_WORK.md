@@ -91,7 +91,7 @@ deliberate subset of the Sigma condition grammar (documented in
 **Status (2026-07-16):** a conformance gate now diffs the two evaluators —
 [`backend/test/rules/conformance.test.ts`](backend/test/rules/conformance.test.ts) compiles every
 rule with the real `convert-sigma` converter and asserts, per rule, that the portal and Wazuh
-verdicts agree. **All 15 rules are now conformant** — the divergence map is empty.
+verdicts agree. **All 20 rules are now conformant** — the divergence map is empty.
 
 **All four structural gaps closed 2026-07-16:**
 - **R-04 / R-08 / R-13** — `filter_*` negations were dropped at compile time. The converter now
@@ -136,7 +136,8 @@ cluster-wide, especially on the login-adjacent and playbook endpoints.
 
 ## 9. Ingestion path is seed-driven in the MVP
 
-`scripts/seed.ts` pushes representative events directly into OpenSearch so all 15 rules fire.
+`scripts/seed.ts` pushes representative events directly into OpenSearch so the 15 seeded
+scenarios (R-01…R-15) fire.
 Real log shippers (Keycloak events, API-gateway access logs, MQTT broker, K8s audit, Hetzner
 syslog) are expected to feed `surf-events-*` in the same ECS + `surf.*` shape; only the pgaudit
 promtail collector is wired in compose.
@@ -149,7 +150,16 @@ enriches each window before evaluation), so they are derived from whatever shipp
 `surf-events-*` without requiring a shipper to compute them. `enrich()` is idempotent, so if a
 future write-side ingest path bakes the flags in, the read-side pass leaves them untouched.
 
-**Caveat:** the enricher's reference data is still `DEMO_REFERENCE_CONFIG` (demo geo/CIDR/change
-calendar/tenant map) hardcoded in `main.ts`, and its login/firmware history is process-local
-in-memory. Production must supply reference data from IPAM/CMDB/change-calendar/Keycloak and
-persist (or accept the cold-start/restart reset of) the stateful history.
+**Status (2026-10-05):** a real write path exists — `POST /ingest/events`
+([`docs/INGEST.md`](docs/INGEST.md): static token, nested→dotted normalisation, per-item
+validation, `surf.enrichment.*` stripped on the way in) — and R-16…R-20 target the first
+Vector-shipped sources (Caddy `hems` / `partner-api`, Keycloak per-IP, sshd, backend HEMS token
+audit). Still open: the Vector configuration on the application VPS itself, and backend
+emission of the `hems_token_*` audit events that R-20 consumes.
+
+**Caveat:** the enricher's reference data defaults to `DEMO_REFERENCE_CONFIG` (demo geo/CIDR/change
+calendar/tenant map); `ENRICHMENT_REFERENCE_PATH` overrides it per key from a JSON file
+(`observability/enrichment-reference.example.json`, see `docs/INGEST.md`), but the login/firmware
+history is still process-local in-memory. Production must keep that file in sync with
+IPAM/CMDB/change-calendar/Keycloak and persist (or accept the cold-start/restart reset of) the
+stateful history.

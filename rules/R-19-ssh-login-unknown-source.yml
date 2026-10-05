@@ -1,0 +1,43 @@
+title: SSH login from unknown source
+id: a1583aaa-46ba-4824-a6ee-33d4e6e15207
+status: test
+description: >
+  Detects a successful SSH login on a SURF server from an address outside the
+  maintained admin allow-list. The enricher computes
+  surf.enrichment.ip_allowlisted from the allowlistCidrs reference data
+  (observability/enrichment-reference.example.json lists the admin and server
+  addresses); any accepted session from elsewhere means a leaked key, a new
+  admin workstation that was not registered, or lateral movement between hosts.
+  Low severity because the login already succeeded with a valid key — it is a
+  review item, not an active block.
+author: SURF Detection Team
+date: 2026/10/05
+references:
+  - https://attack.mitre.org/techniques/T1078/
+  - https://attack.mitre.org/techniques/T1021/004/
+tags:
+  - attack.initial_access
+  - attack.t1078
+  - attack.t1021.004
+  - surf.threat.AV-09
+  - nis2.art.21.2.b
+level: low
+logsource:
+  product: sshd
+  service: auth
+detection:
+  selection:
+    event.action: ssh_login
+    event.outcome: success
+    surf.enrichment.ip_allowlisted: false
+  condition: selection
+falsepositives:
+  - Admin working from a new location before the allow-list file was updated
+  - Server-to-server jobs (backup, deploy) that run from an address missing in the allow-list
+owner: detection-team@surf
+surf.threat_id: AV-09
+surf.compliance:
+  - "NIS2 Art. 21(2)(b)"
+  - "IEC 62443-3-3 FR1.1"
+  - "KRITIS §8a BSIG"
+  - "ISO 27001 A.8.20"

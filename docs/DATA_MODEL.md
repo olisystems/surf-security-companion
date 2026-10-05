@@ -3,6 +3,8 @@
 ## Log normalisation — ECS 8.x + `surf.*`
 
 All ingested events are normalised to **Elastic Common Schema 8.x** with a SURF extension.
+Shippers deliver documents through `POST /ingest/events` ([INGEST.md](INGEST.md)), which flattens
+nested objects to the flat dotted-key form used throughout (`event.action`, not `event: {action}`).
 Core ECS fields used by the detection rules:
 
 | Field | Type | Notes |
@@ -16,6 +18,10 @@ Core ECS fields used by the detection rules:
 | `user.name` | keyword | actor |
 | `source.ip` | ip | client address |
 | `host.name` | keyword | host |
+| `http.request.method` | keyword | HTTP verb (edge access logs) |
+| `http.response.status_code` | long | HTTP status as an **integer** (R-16 / R-17 compare numerically) |
+| `url.path` | keyword | request path without query (R-16 `/Control`, R-17 `/external/v1/`) |
+| `user_agent.original` | keyword | raw User-Agent string |
 
 ### SURF extension (`surf.*`)
 
@@ -33,6 +39,8 @@ Core ECS fields used by the detection rules:
 | `surf.prosumer.pseudonym` | keyword | Pseudonymised prosumer ID |
 | `surf.trade.cycle_id` | keyword | Trading cycle ID |
 | `surf.risk.tier` | keyword | Critical / High / Medium / Low |
+| `surf.ingest.received_at` | date | Set by `POST /ingest/events` when the batch was accepted |
+| `surf.ingest.source` | keyword | Shipper label (`INGEST_SOURCE_LABEL`, default `vector`) |
 
 ### Ingest-time enrichment (`surf.enrichment.*`)
 
@@ -45,7 +53,7 @@ the detection logic simple and auditable:
 | `surf.enrichment.cross_tenant_mismatch` | R-04 | query tenant ≠ session tenant |
 | `surf.enrichment.firmware_downgrade` | R-10 | semver lower than last inventory |
 | `surf.enrichment.in_change_window` | R-13 | inside the declared change window |
-| `surf.enrichment.ip_allowlisted` | R-15 | client IP in the maintained allow-list |
+| `surf.enrichment.ip_allowlisted` | R-15, R-19 | client IP in the maintained allow-list (pgaudit connections, sshd logins) |
 
 ## Indices
 

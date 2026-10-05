@@ -1,6 +1,6 @@
 /**
- * Seed script — pushes representative events into OpenSearch so that ALL 15
- * correlation rules fire at least once on the next scheduler tick.
+ * Seed script — pushes representative events into OpenSearch so that the 15 seeded
+ * scenarios (R-01…R-15) fire at least once on the next scheduler tick.
  *
  * Usage: npm run seed  (reads .env for OPENSEARCH_* credentials)
  */

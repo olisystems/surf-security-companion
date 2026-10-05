@@ -20,3 +20,6 @@ test-results/
 *.tsbuildinfo
 .DS_Store
 Thumbs.db
+
+# deployment-specific enrichment reference data (copy of the .example)
+observability/enrichment-reference.json

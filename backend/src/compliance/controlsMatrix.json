@@ -1,6 +1,6 @@
 {
   "$comment": "Source of truth for COMPLIANCE.md — rendered by scripts/render-compliance.ts",
-  "generated": "2026-07-14",
+  "generated": "2026-10-05",
   "controls": [
     { "id": "R-01", "title": "Keycloak brute-force login", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.1", "kritis": "§8a BSIG", "iso27001": "A.8.5" },
     { "id": "R-02", "title": "Impossible-travel login for VNB user", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.7", "kritis": "§8a BSIG", "iso27001": "A.8.15" },
@@ -17,6 +17,11 @@
     { "id": "R-13", "title": "New service account outside change window", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.3", "kritis": "§8a BSIG", "iso27001": "A.8.2" },
     { "id": "R-14", "title": "Kubernetes exec into a production pod", "nis2": "Art. 21(2)(e)", "iec62443": "FR2.1", "kritis": "§8a BSIG", "iso27001": "A.8.9" },
     { "id": "R-15", "title": "DB access from IP outside allow-list", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.1", "kritis": "§8a BSIG", "iso27001": "A.8.20" },
+    { "id": "R-16", "title": "HEMS device token brute-force", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.1", "kritis": "§8a BSIG", "iso27001": "A.8.5" },
+    { "id": "R-17", "title": "Partner API key failures", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.5", "kritis": "§8a BSIG", "iso27001": "A.8.5" },
+    { "id": "R-18", "title": "Keycloak login failures by source IP", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.1", "kritis": "§8a BSIG", "iso27001": "A.8.5" },
+    { "id": "R-19", "title": "SSH login from unknown source", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.1", "kritis": "§8a BSIG", "iso27001": "A.8.20" },
+    { "id": "R-20", "title": "HEMS device token lifecycle", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.3", "kritis": "§8a BSIG", "iso27001": "A.8.15" },
     { "id": "P-01", "title": "OIDC + PKCE + WebAuthn/OTP MFA", "nis2": "Art. 21(2)(j)", "iec62443": "FR1.1/FR1.7", "kritis": "§8a BSIG", "iso27001": "A.8.5" },
     { "id": "P-02", "title": "Tenant-scoped RBAC (surf_tenant_id)", "nis2": "Art. 21(2)(i)", "iec62443": "FR2.1", "kritis": "§8a BSIG", "iso27001": "A.8.3" },
     { "id": "P-03", "title": "Hourly signed Merkle rollups + WORM", "nis2": "Art. 21(2)(h)", "iec62443": "FR3.4", "kritis": "§8a BSIG", "iso27001": "A.8.15" },

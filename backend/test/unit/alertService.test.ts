@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { pino } from 'pino';
 import { AlertService } from '../../src/application/alerts/alertService.js';
 import { AuditService } from '../../src/application/audit/auditService.js';

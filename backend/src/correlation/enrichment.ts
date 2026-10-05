@@ -11,6 +11,7 @@
  *   surf.enrichment.firmware_downgrade   → R-10  (semver below last inventory)
  *   surf.enrichment.in_change_window     → R-13  (inside a declared change window)
  *   surf.enrichment.ip_allowlisted       → R-15  (client IP on the maintained allow-list)
+ *                                          R-19  (same flag, computed for sshd logins)
  *
  * The engine is pure with respect to its injected reference data: all mutable
  * state (login history, firmware inventory) lives behind the reference ports, so
@@ -145,11 +146,11 @@ export class Enricher {
         this.refs.changeWindow.isOpen(str(getField(event, '@timestamp')) ?? new Date().toISOString()),
       );
     }
-    if (action === 'connection_authorized') {
+    if (action === 'connection_authorized' || action === 'ssh_login') {
       const ip = str(getField(event, 'source.ip'));
       // No client IP (e.g. a local unix-socket DB connection) → the allowlist
-      // does not apply. Leave the flag unset so R-15 doesn't fire; a missing IP
-      // is not the same as an off-allowlist IP.
+      // does not apply. Leave the flag unset so R-15/R-19 don't fire; a missing
+      // IP is not the same as an off-allowlist IP.
       if (ip === undefined) return event;
       return this.setIfAbsent(event, 'surf.enrichment.ip_allowlisted', () => this.refs.allowlist.allows(ip));
     }

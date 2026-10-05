@@ -46,6 +46,7 @@ import { SigmaRuleLoader } from './correlation/loader.js';
 import { RuleEvaluator } from './correlation/evaluator.js';
 import { Enricher } from './correlation/enrichment.js';
 import { DefaultReferenceData, DEMO_REFERENCE_CONFIG } from './correlation/enrichmentReferenceData.js';
+import { loadReferenceConfigFile, mergeReferenceConfig } from './correlation/enrichmentReferenceFile.js';
 import { CorrelationScheduler, DEFAULT_SCHEDULER_CONFIG } from './correlation/scheduler.js';
 import { buildServer } from './server.js';
 import type { SigmaRule } from './domain/entities/sigmaRule.js';
@@ -78,9 +79,22 @@ async function main(): Promise<void> {
   // Enrichment runs at the correlation (read/eval) boundary, not at write: raw
   // shippers write straight to surf-events-*, so computing surf.enrichment.*
   // (R-02/04/10/13/15) as the scheduler reads the window is what makes those
-  // rules fire on real telemetry. Reference data is demo-seeded here; production
-  // supplies it from IPAM/CMDB/change calendar/tenant directory.
-  const enrichmentRefs = new DefaultReferenceData(DEMO_REFERENCE_CONFIG);
+  // rules fire on real telemetry. Reference data is demo-seeded; a JSON file at
+  // ENRICHMENT_REFERENCE_PATH overrides it per top-level key (docs/INGEST.md).
+  const referencePath = config.enrichment.referencePath;
+  const referenceConfig =
+    referencePath !== undefined
+      ? mergeReferenceConfig(DEMO_REFERENCE_CONFIG, await loadReferenceConfigFile(referencePath))
+      : DEMO_REFERENCE_CONFIG;
+  log.info(
+    {
+      source: referencePath !== undefined ? 'file' : 'demo',
+      ...(referencePath !== undefined ? { path: referencePath } : {}),
+      allowlistCidrs: referenceConfig.allowlistCidrs.length,
+    },
+    'enrichment reference data loaded',
+  );
+  const enrichmentRefs = new DefaultReferenceData(referenceConfig);
   const enricher = new Enricher(enrichmentRefs);
   const caseRepo = new PostgresCaseRepository(pgPool);
   const auditRepo = new PostgresAuditRepository(pgPool);
@@ -178,6 +192,7 @@ async function main(): Promise<void> {
       gdprService,
       merkleChain,
       auditRepo,
+      eventStore,
       wazuh,
       pgPool,
       opensearch,
@@ -206,7 +221,7 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  // eslint-disable-next-line no-console -- logger may not exist yet
+  // logger may not exist yet (console.error is allowed by the lint config)
   console.error('fatal startup error:', err);
   process.exit(1);
 });

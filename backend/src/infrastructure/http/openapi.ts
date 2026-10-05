@@ -18,6 +18,7 @@ export async function registerOpenApi(app: FastifyInstance): Promise<void> {
       components: {
         securitySchemes: {
           bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+          ingestToken: { type: 'http', scheme: 'bearer', bearerFormat: 'opaque' },
         },
       },
       security: [{ bearerAuth: [] }],
@@ -30,6 +31,7 @@ export async function registerOpenApi(app: FastifyInstance): Promise<void> {
         { name: 'playbooks', description: 'SOAR (safe-mode)' },
         { name: 'reports', description: 'NIS2 / KRITIS / GDPR' },
         { name: 'admin', description: 'Platform administration' },
+        { name: 'ingest', description: 'Log-shipper write path (static token)' },
       ],
     },
   });

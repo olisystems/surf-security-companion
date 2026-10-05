@@ -7,7 +7,7 @@ import type { ReportService } from '../../application/reports/reportService.js';
 import type { Nis2Service } from '../../application/nis2/nis2Service.js';
 import type { GdprService } from '../../application/gdpr/gdprService.js';
 import type { MerkleChainService } from '../../application/merkleChain/merkleChainService.js';
-import type { AuditRepository } from '../../domain/ports/repositories.js';
+import type { AuditRepository, EventStore } from '../../domain/ports/repositories.js';
 import type { WazuhConnector } from '../../domain/ports/connectors.js';
 import type { AuthzMiddleware } from './middleware/authz.js';
 import type { Metrics } from '../telemetry/prom.js';
@@ -30,6 +30,7 @@ export interface AppDeps {
   gdprService: GdprService;
   merkleChain: MerkleChainService;
   auditRepo: AuditRepository;
+  eventStore: EventStore;
   wazuh: WazuhConnector;
   pgPool: pg.Pool;
   opensearch: OpenSearchClient;

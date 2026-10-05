@@ -1,0 +1,4 @@
+[
+  {"@timestamp":"2026-10-05T10:00:00Z","event.id":"r20-n-1","observer.product":"surf-backend","observer.service":"hems","event.action":"hems_control_pull","event.outcome":"success","user.name":"admin@demo","surf.tenant.id":"demo","surf.ems.id":"APX1045765804","host.name":"surf-vps1"},
+  {"@timestamp":"2026-10-05T10:00:05Z","event.id":"r20-n-2","observer.product":"surf-backend","observer.service":"hems","event.action":"hems_forecast_push","event.outcome":"success","user.name":"admin@demo","surf.tenant.id":"demo","surf.ems.id":"APX1045765804","host.name":"surf-vps1"}
+]

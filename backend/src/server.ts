@@ -15,6 +15,7 @@ import { registerPlaybookRoutes } from './infrastructure/http/routes/playbooks.j
 import { registerRuleRoutes } from './infrastructure/http/routes/rules.js';
 import { registerReportRoutes } from './infrastructure/http/routes/reports.js';
 import { registerAdminRoutes } from './infrastructure/http/routes/admin.js';
+import { registerIngestRoutes } from './infrastructure/http/routes/ingest.js';
 
 /**
  * Fastify assembly. The nginx edge strips /api, so routes register without
@@ -72,6 +73,7 @@ export async function buildServer(deps: AppDeps, logger: Logger): Promise<Fastif
   registerRuleRoutes(app, deps);
   registerReportRoutes(app, deps);
   registerAdminRoutes(app, deps);
+  registerIngestRoutes(app, deps);
 
   return app;
 }

@@ -1,0 +1,4 @@
+[
+  {"@timestamp":"2026-10-05T10:00:00Z","event.id":"r19-n-1","observer.product":"sshd","observer.service":"auth","event.action":"ssh_login","event.outcome":"success","surf.enrichment.ip_allowlisted":true,"user.name":"root","source.ip":"217.244.216.71","host.name":"surf-vps2"},
+  {"@timestamp":"2026-10-05T10:00:05Z","event.id":"r19-n-2","observer.product":"sshd","observer.service":"auth","event.action":"ssh_login","event.outcome":"failure","surf.enrichment.ip_allowlisted":false,"user.name":"root","source.ip":"203.0.113.9","host.name":"surf-vps2"}
+]

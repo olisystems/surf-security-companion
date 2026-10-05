@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { pino } from 'pino';
 import { MerkleChainService } from '../../src/application/merkleChain/merkleChainService.js';
 import type { EventStore, HashchainRepository } from '../../src/domain/ports/repositories.js';

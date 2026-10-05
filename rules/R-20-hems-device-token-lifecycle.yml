@@ -1,0 +1,39 @@
+title: HEMS device token lifecycle
+id: 8cbe8ee8-c83c-4bae-a59a-6a3294e9d705
+status: test
+description: >
+  Records every issue, rotation and revocation of a HEMS-Lite device token in
+  the SURF backend (sites.amperix_token_hash). A token lets a device pull its
+  battery control schedule, so each lifecycle step is an auditable credential
+  change: the field-test release checklist requires that token issuance on
+  production is traceable to an operator action. Informational — no response
+  expected; the alert is the audit trail.
+author: SURF Detection Team
+date: 2026/10/05
+references:
+  - https://attack.mitre.org/techniques/T1098/
+  - https://attack.mitre.org/techniques/T1098/001/
+tags:
+  - attack.persistence
+  - attack.t1098
+  - surf.threat.HEMS-01
+  - nis2.art.21.2.b
+level: informational
+logsource:
+  product: surf-backend
+  service: hems
+detection:
+  selection:
+    event.action:
+      - hems_token_issued
+      - hems_token_rotated
+      - hems_token_revoked
+  condition: selection
+falsepositives:
+  - None — every token change is expected to appear here; volume is the signal, not the event itself
+owner: detection-team@surf
+surf.compliance:
+  - "NIS2 Art. 21(2)(b)"
+  - "IEC 62443-3-3 FR1.3"
+  - "KRITIS §8a BSIG"
+  - "ISO 27001 A.8.15"
