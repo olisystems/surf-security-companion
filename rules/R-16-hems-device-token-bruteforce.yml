@@ -2,7 +2,7 @@ title: HEMS device token brute-force
 id: 00ea4f54-86d4-49ae-82e9-43ecb5c0e7f5
 status: test
 description: >
-  Detects more than 30 HTTP 401 responses on a HEMS-Lite Control channel
+  Detects more than 10 HTTP 401 responses on a HEMS-Lite Control channel
   (hems.surf.saarland/{serial}_plim_consumption/Control) from one source IP
   within 5 minutes. A legitimate AMPERIX polls with a valid device token; a
   sustained 401 stream means token guessing, a revoked token still deployed on
@@ -29,7 +29,7 @@ detection:
     http.response.status_code: 401
     url.path|contains: '/Control'
   timeframe: 5m
-  condition: selection | count() by source.ip > 30
+  condition: selection | count() by source.ip > 10
 falsepositives:
   - Device token rotated in the portal but not yet updated in the AMPERIX poll entry (self-heals once the device is reconfigured)
   - Field-test commissioning where a device is deliberately polled before its token is issued
