@@ -106,29 +106,5 @@
     "source.ip": "79.198.160.48",
     "user_agent.original": "AMPERIX/1.4",
     "host.name": "surf-vps1"
-  },
-  {
-    "@timestamp": "2026-10-05T10:00:45Z",
-    "event.id": "r16-p-10",
-    "observer.product": "caddy",
-    "observer.service": "hems",
-    "http.request.method": "GET",
-    "http.response.status_code": 401,
-    "url.path": "/APX1045765804_plim_consumption/Control",
-    "source.ip": "79.198.160.48",
-    "user_agent.original": "AMPERIX/1.4",
-    "host.name": "surf-vps1"
-  },
-  {
-    "@timestamp": "2026-10-05T10:00:50Z",
-    "event.id": "r16-p-11",
-    "observer.product": "caddy",
-    "observer.service": "hems",
-    "http.request.method": "GET",
-    "http.response.status_code": 401,
-    "url.path": "/APX1045765804_plim_consumption/Control",
-    "source.ip": "79.198.160.48",
-    "user_agent.original": "AMPERIX/1.4",
-    "host.name": "surf-vps1"
   }
 ]
