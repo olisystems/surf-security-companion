@@ -44,6 +44,13 @@
       "color": ""
     },
     {
+      "techniqueID": "T1098.004",
+      "score": 1,
+      "comment": "R-22: Integrity change in production config or SSH trust",
+      "enabled": true,
+      "color": ""
+    },
+    {
       "techniqueID": "T1110",
       "score": 2,
       "comment": "R-01: Keycloak brute-force login\nR-17: Partner API key failures",
@@ -75,6 +82,13 @@
       "techniqueID": "T1213",
       "score": 1,
       "comment": "R-04: Cross-tenant query",
+      "enabled": true,
+      "color": ""
+    },
+    {
+      "techniqueID": "T1562.001",
+      "score": 1,
+      "comment": "R-21: Wazuh high-severity host alert",
       "enabled": true,
       "color": ""
     },

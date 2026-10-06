@@ -59,7 +59,13 @@ services:
   opensearch-dashboards:
     ports: !override []
   wazuh-manager:
-    ports: !override []
+    # SOC Phase 2b: agent (1514) + enrollment (1515) are published ONLY on the
+    # WireGuard address of this host. Docker bypasses ufw, so binding to the
+    # tunnel IP is the actual guard; wg-quick@wg0 must be up before the stack
+    # (Docker keeps restarting the container until the address exists).
+    ports: !override
+      - "10.44.0.1:1514:1514"
+      - "10.44.0.1:1515:1515"
   minio:
     ports: !override []
   otel-collector:

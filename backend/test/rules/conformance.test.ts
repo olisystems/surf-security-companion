@@ -36,7 +36,7 @@ const DIVERGENCES: Record<string, string> = {};
 const CONFORMANT = [
   'R-01', 'R-02', 'R-03', 'R-04', 'R-05', 'R-06', 'R-07', 'R-08',
   'R-09', 'R-10', 'R-11', 'R-12', 'R-13', 'R-14', 'R-15', 'R-16',
-  'R-17', 'R-18', 'R-19', 'R-20',
+  'R-17', 'R-18', 'R-19', 'R-20', 'R-21', 'R-22',
 ] as const;
 
 const log = pino({ level: 'silent' });
@@ -88,7 +88,7 @@ beforeAll(async () => {
 
 describe('portal ↔ Wazuh conformance', () => {
   it('compiles all 20 rules to a Wazuh rule with at least one field', () => {
-    expect(xmlByFileId.size).toBe(20);
+    expect(xmlByFileId.size).toBe(22);
     for (const [fileId, xml] of xmlByFileId) {
       expect(xml, `${fileId} should be a <rule>`).toContain('<rule id=');
       expect(xml, `${fileId} should carry at least one field`).toContain('<field ');
@@ -114,8 +114,8 @@ describe('portal ↔ Wazuh conformance', () => {
 
   it('every rule is classified as conformant or a documented divergence', () => {
     const all = [...CONFORMANT, ...Object.keys(DIVERGENCES)];
-    expect(all).toHaveLength(20);
-    expect(new Set(all).size).toBe(20);
+    expect(all).toHaveLength(22);
+    expect(new Set(all).size).toBe(22);
     expect(Object.keys(DIVERGENCES)).toHaveLength(0); // all gaps closed
   });
 

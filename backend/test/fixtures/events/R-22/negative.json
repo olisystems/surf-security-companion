@@ -1,0 +1,55 @@
+[
+  {
+    "@timestamp": "2026-10-05T13:00:01Z",
+    "event.id": "fx-1",
+    "event.kind": "alert",
+    "event.action": "wazuh_alert",
+    "observer.product": "wazuh",
+    "observer.service": "syscheck",
+    "host.name": "vps1-prod",
+    "wazuh.agent.id": "001",
+    "surf.tenant.id": "vnb-saar",
+    "wazuh.rule.id": "550",
+    "wazuh.rule.level": 7,
+    "event.severity": 7,
+    "event.category": "file",
+    "wazuh.rule.groups": [
+      "ossec",
+      "syscheck",
+      "syscheck_entry_modified"
+    ],
+    "file.path": "/var/log/x",
+    "wazuh.syscheck.event": "modified"
+  },
+  {
+    "@timestamp": "2026-10-05T13:00:02Z",
+    "event.id": "fx-2",
+    "event.kind": "alert",
+    "event.action": "wazuh_alert",
+    "observer.product": "wazuh",
+    "observer.service": "syslog",
+    "host.name": "vps1-prod",
+    "wazuh.agent.id": "001",
+    "surf.tenant.id": "vnb-saar",
+    "wazuh.rule.id": "5712",
+    "wazuh.rule.level": 10,
+    "event.severity": 10,
+    "wazuh.rule.groups": [
+      "syslog",
+      "sshd"
+    ],
+    "file.path": "/opt/surf/.env"
+  },
+  {
+    "@timestamp": "2026-10-05T13:00:03Z",
+    "event.id": "fx-3",
+    "event.kind": "alert",
+    "event.action": "wazuh_alert",
+    "observer.product": "caddy",
+    "observer.service": "hems",
+    "host.name": "vps1-prod",
+    "wazuh.agent.id": "001",
+    "surf.tenant.id": "vnb-saar",
+    "file.path": "/opt/surf/.env"
+  }
+]

@@ -1,0 +1,44 @@
+title: Integrity change in production config or SSH trust
+id: be11d583-1198-4c19-87d2-c61d7715980d
+status: test
+description: >
+  Detects Wazuh syscheck (file integrity) alerts for the production stack
+  (/opt/surf: compose files, Caddyfile, .env, vector config), the SSH trust
+  store (/root/.ssh, /etc/ssh), the WireGuard tunnel keys and sudoers on an
+  enrolled host. Any change here is either a deployment (expected, logged in
+  git + SESSION_LOG) or persistence by an intruder (new authorized key, altered
+  sshd_config, edited secrets). Declared change windows are a later
+  refinement — for now every change is surfaced for review.
+author: SURF Detection Team
+date: 2026/10/05
+references:
+  - https://attack.mitre.org/techniques/T1098/004/
+  - https://attack.mitre.org/techniques/T1543/
+tags:
+  - attack.persistence
+  - attack.t1098.004
+  - nis2.art.21.2.e
+level: medium
+logsource:
+  product: wazuh
+  service: syscheck
+detection:
+  selection:
+    observer.product: wazuh
+    observer.service: syscheck
+    file.path|contains:
+      - '/opt/surf/'
+      - '/root/.ssh/'
+      - '/etc/wireguard/'
+      - '/etc/ssh/'
+      - '/etc/sudoers'
+  condition: selection
+falsepositives:
+  - Deployments via scripts/deploy.sh and git pull on the production host (correlate with the deploy time in SESSION_LOG)
+  - Package upgrades touching /etc/ssh (unattended-upgrades)
+owner: detection-team@surf
+surf.compliance:
+  - "NIS2 Art. 21(2)(e)"
+  - "IEC 62443-3-3 FR3.4"
+  - "KRITIS §8a BSIG"
+  - "ISO 27001 A.8.9"

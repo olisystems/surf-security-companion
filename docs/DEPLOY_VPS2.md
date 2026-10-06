@@ -43,3 +43,11 @@ Fehlkonfiguration ⇒ `down -v` und neu.
 
 OpenSearch 9200 wird dann gezielt re-exponiert — nur für 178.104.103.16
 (SURF-VPS), via zusätzlichem Overlay-Eintrag + ufw-Regel. Nicht vorher.
+
+## SOC Phase 2b — WireGuard + Wazuh-Agent (2026-10-05)
+
+- `wg-quick@wg0` (10.44.0.1/24, UDP 51820, ufw nur von 178.104.103.16) muss **vor** dem Stack
+  laufen: `systemctl enable --now wg-quick@wg0`. Der Manager publisht 1514/1515 nur auf 10.44.0.1
+  (`docker-compose.prod.yml`); solange die Adresse fehlt, startet Docker den Container neu.
+- Nach `git pull`: `up -d --build --no-deps wazuh-manager vector` (agent.conf-Mount + Mirror),
+  dann `agent_control -l` prüfen. Details: `docs/WAZUH_AGENT.md`.

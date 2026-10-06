@@ -20,7 +20,7 @@ with a technique but no tactic tag shows up as a content gap. Changing tags mean
 
 ## Supported detection grammar
 
-The evaluator implements a deliberate subset of Sigma (everything the 20 rules need). Adding
+The evaluator implements a deliberate subset of Sigma (everything the 22 rules need). Adding
 a construct beyond this list means extending `src/correlation/evaluator.ts` **with tests**.
 
 ```

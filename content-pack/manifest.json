@@ -1,9 +1,9 @@
 {
   "name": "SURF KRITIS Detection Pack",
   "version": "2026.10.1",
-  "generatedAt": "2026-10-05T13:23:11.520Z",
-  "ruleCount": 20,
-  "contentHash": "64e9cc0f82aa5b360e4c1a326c0f4f36974c95284a95d7c18e9e31ce4fada7e6",
+  "generatedAt": "2026-10-06T07:05:47.296Z",
+  "ruleCount": 22,
+  "contentHash": "731de99c825cc46f4e8db4bbeb4d408c8c3afc0a88801ebae2d8ff99f8eb5ae7",
   "rules": [
     {
       "fileId": "R-01",
@@ -327,6 +327,38 @@
       "enabled": true,
       "enterprise": [
         "T1098"
+      ],
+      "ics": [],
+      "tactics": [
+        "persistence"
+      ],
+      "complianceCount": 4
+    },
+    {
+      "fileId": "R-21",
+      "id": "6518afc1-cfc7-4685-a699-96690cdcada6",
+      "title": "Wazuh high-severity host alert",
+      "level": "high",
+      "status": "test",
+      "enabled": true,
+      "enterprise": [
+        "T1562.001"
+      ],
+      "ics": [],
+      "tactics": [
+        "defense_evasion"
+      ],
+      "complianceCount": 4
+    },
+    {
+      "fileId": "R-22",
+      "id": "be11d583-1198-4c19-87d2-c61d7715980d",
+      "title": "Integrity change in production config or SSH trust",
+      "level": "medium",
+      "status": "test",
+      "enabled": true,
+      "enterprise": [
+        "T1098.004"
       ],
       "ics": [],
       "tactics": [

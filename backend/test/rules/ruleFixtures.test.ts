@@ -35,8 +35,8 @@ function ruleForFixture(dir: string): SigmaRule {
 describe('Sigma rule fixtures', () => {
   const fixtureDirs = readdirSync(fixturesDir).filter((d) => /^R-\d{2}$/.test(d)).sort();
 
-  it('has a fixture directory for all 20 rules', () => {
-    expect(fixtureDirs).toHaveLength(20);
+  it('has a fixture directory for all 22 rules', () => {
+    expect(fixtureDirs).toHaveLength(22);
   });
 
   for (const dir of fixtureDirs) {

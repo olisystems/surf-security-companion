@@ -38,6 +38,13 @@
       ]
     },
     {
+      "techniqueID": "T1098.004",
+      "domain": "enterprise-attack",
+      "rules": [
+        "R-22"
+      ]
+    },
+    {
       "techniqueID": "T1110",
       "domain": "enterprise-attack",
       "rules": [
@@ -71,6 +78,13 @@
       "domain": "enterprise-attack",
       "rules": [
         "R-04"
+      ]
+    },
+    {
+      "techniqueID": "T1562.001",
+      "domain": "enterprise-attack",
+      "rules": [
+        "R-21"
       ]
     },
     {
@@ -144,6 +158,12 @@
       ]
     },
     {
+      "tactic": "defense_evasion",
+      "rules": [
+        "R-21"
+      ]
+    },
+    {
       "tactic": "execution",
       "rules": [
         "R-14"
@@ -174,7 +194,8 @@
       "rules": [
         "R-12",
         "R-13",
-        "R-20"
+        "R-20",
+        "R-22"
       ]
     }
   ],
@@ -186,9 +207,9 @@
     "R-11"
   ],
   "totals": {
-    "rules": 20,
-    "enterpriseTechniques": 13,
+    "rules": 22,
+    "enterpriseTechniques": 15,
     "icsTechniques": 4,
-    "tactics": 7
+    "tactics": 8
   }
 }

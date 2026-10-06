@@ -91,7 +91,7 @@ deliberate subset of the Sigma condition grammar (documented in
 **Status (2026-07-16):** a conformance gate now diffs the two evaluators —
 [`backend/test/rules/conformance.test.ts`](backend/test/rules/conformance.test.ts) compiles every
 rule with the real `convert-sigma` converter and asserts, per rule, that the portal and Wazuh
-verdicts agree. **All 20 rules are now conformant** — the divergence map is empty.
+verdicts agree. **All 22 rules are now conformant** — the divergence map is empty.
 
 **All four structural gaps closed 2026-07-16:**
 - **R-04 / R-08 / R-13** — `filter_*` negations were dropped at compile time. The converter now

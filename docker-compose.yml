@@ -178,6 +178,27 @@ services:
         condition: service_healthy
     logging: *default-logging
 
+  # SOC Phase 2b: mirrors the Wazuh manager's alerts.json (and this host's own
+  # sshd log) into the portal's event index via POST /ingest/events, so Wazuh
+  # findings (FIM, SCA, rootcheck, agent sshd rules) go through the same Sigma
+  # correlation as the VPS1 shipper. Config: observability/vector-soc.yaml.
+  vector:
+    image: timberio/vector:0.42.0-alpine
+    restart: unless-stopped
+    command: ["--config", "/etc/vector/vector.yaml"]
+    environment:
+      INGEST_TOKEN: ${INGEST_TOKEN:-}
+      VECTOR_LOG: warn
+    volumes:
+      - ./observability/vector-soc.yaml:/etc/vector/vector.yaml:ro
+      - wazuh-logs:/var/ossec/logs:ro
+      - /var/log/auth.log:/var/log/auth.log:ro
+      - vector-data:/var/lib/vector
+    depends_on:
+      backend:
+        condition: service_healthy
+    logging: *default-logging
+
   opensearch:
     image: opensearchproject/opensearch:2.18.0
     restart: unless-stopped
@@ -245,6 +266,9 @@ services:
       # directly under /var/ossec/etc makes that dir non-empty at startup, so
       # the entrypoint skips restoring the default config (ossec.conf, ar.conf).
       - compiled-rules:/wazuh-config-mount/etc/rules/surf:ro
+      # Centralised agent configuration (FIM/SCA/syscollector for the VPS1 agent,
+      # SOC Phase 2b) — same config-mount mechanism, lands in /var/ossec/etc/shared/default/.
+      - ./wazuh/shared/default/agent.conf:/wazuh-config-mount/etc/shared/default/agent.conf:ro
       - ./certs:/etc/ssl/certs/surf:ro
     networks:
       default:
@@ -401,6 +425,7 @@ services:
 
 volumes:
   keycloak-data:
+  vector-data:
   pg-data:
   pg-logs:
   opensearch-data:

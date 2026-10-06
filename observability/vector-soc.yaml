@@ -1,0 +1,115 @@
+# Vector on VPS2 — mirrors Wazuh manager alerts (and this host's sshd log) into
+# the portal's event index through POST /ingest/events (SOC Phase 2b).
+# Flat dotted-key ECS, same contract as the VPS1 shipper (docs/INGEST.md).
+
+data_dir: /var/lib/vector
+
+sources:
+  wazuh_alerts:
+    type: file
+    include: ["/var/ossec/logs/alerts/alerts.json"]
+    read_from: end
+
+  auth_log:
+    type: file
+    include: ["/var/log/auth.log"]
+    read_from: end
+
+transforms:
+  # ── Wazuh alerts.json → ECS ───────────────────────────────────────────────
+  wazuh_ecs:
+    type: remap
+    inputs: [wazuh_alerts]
+    drop_on_error: true
+    source: |
+      a = parse_json!(string!(.message))
+      out = {}
+      out."@timestamp" = format_timestamp!(parse_timestamp!(string!(a.timestamp), "%Y-%m-%dT%H:%M:%S%.3f%z"), "%+")
+      out."event.id" = string(a.id) ?? uuid_v4()
+      out."event.kind" = "alert"
+      out."event.action" = "wazuh_alert"
+      level = to_int!(a.rule.level)
+      out."event.severity" = level
+      out."event.category" = "host"
+      out."observer.product" = "wazuh"
+      out."observer.service" = string(a.rule.groups[0]) ?? "wazuh"
+      if exists(a.syscheck) {
+        out."event.category" = "file"
+        out."observer.service" = "syscheck"
+      }
+      out."host.name" = string(a.agent.name) ?? "unknown"
+      out."wazuh.rule.id" = string!(a.rule.id)
+      out."wazuh.rule.level" = level
+      out."wazuh.rule.description" = string!(a.rule.description)
+      out."wazuh.rule.groups" = array(a.rule.groups) ?? []
+      out."wazuh.agent.id" = string(a.agent.id) ?? ""
+      if exists(a.data.srcip) { out."source.ip" = string!(a.data.srcip) }
+      if exists(a.data.dstuser) { out."user.name" = string!(a.data.dstuser) } else if exists(a.data.srcuser) { out."user.name" = string!(a.data.srcuser) }
+      if exists(a.syscheck.path) { out."file.path" = string!(a.syscheck.path) }
+      if exists(a.syscheck.event) { out."wazuh.syscheck.event" = string!(a.syscheck.event) }
+      if exists(a.full_log) { out."message" = truncate(string!(a.full_log), 1000) }
+      out."surf.tenant.id" = "vnb-saar"
+      . = out
+
+  # ── sshd (this host's auth.log) → ECS ────────────────────────────────────
+  sshd_ecs:
+    type: remap
+    inputs: [auth_log]
+    drop_on_error: true
+    source: |
+      line = string!(.message)
+      if !contains(line, "sshd") { abort }
+      ok = parse_regex(line, r'Accepted (?P<method>\w+) for (?P<user>\S+) from (?P<ip>[\d.:a-f]+) port \d+ ssh2(?:: (?P<keytype>\S+) (?P<fp>SHA256:\S+))?') ?? null
+      fail = parse_regex(line, r'(?:Failed (?P<method>\w+) for (?:invalid user )?(?P<user>\S+)|Invalid user (?P<iuser>\S+)) from (?P<ip>[\d.:a-f]+)') ?? null
+      if ok == null && fail == null { abort }
+      out = {}
+      out."@timestamp" = to_string!(.timestamp)
+      out."event.id" = uuid_v4()
+      out."event.kind" = "event"
+      out."event.category" = "authentication"
+      out."event.action" = "ssh_login"
+      out."observer.product" = "sshd"
+      out."observer.service" = "auth"
+      out."host.name" = "vps2"
+      if ok != null {
+        out."event.outcome" = "success"
+        out."user.name" = string!(ok.user)
+        out."source.ip" = string!(ok.ip)
+        out."surf.ssh.method" = string!(ok.method)
+        if exists(ok.fp) { out."surf.ssh.key_fingerprint" = string!(ok.fp) }
+      } else {
+        out."event.outcome" = "failure"
+        out."user.name" = (string(fail.user) ?? string(fail.iuser) ?? "unknown")
+        out."source.ip" = string!(fail.ip)
+      }
+      . = out
+
+sinks:
+  ingest:
+    type: http
+    inputs: [wazuh_ecs, sshd_ecs]
+    uri: "http://backend:8080/ingest/events"
+    method: post
+    encoding:
+      codec: json
+    framing:
+      method: character_delimited
+      character_delimited:
+        delimiter: ","
+    request:
+      headers:
+        Authorization: "Bearer ${INGEST_TOKEN}"
+        Content-Type: application/json
+      retry_attempts: 1000000
+      retry_max_duration_secs: 60
+    batch:
+      max_events: 500
+      timeout_secs: 5
+    buffer:
+      type: disk
+      max_size: 536870912   # Vector minimum: 256 MiB + 32 B
+      when_full: block
+    # codec json + character_delimited framing already yields a JSON array —
+    # only the object envelope is added (no '[' in the prefix).
+    payload_prefix: '{"events":'
+    payload_suffix: '}'

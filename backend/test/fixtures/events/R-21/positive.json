@@ -1,0 +1,23 @@
+[
+  {
+    "@timestamp": "2026-10-05T13:00:01Z",
+    "event.id": "fx-1",
+    "event.kind": "alert",
+    "event.action": "wazuh_alert",
+    "observer.product": "wazuh",
+    "observer.service": "syslog",
+    "host.name": "vps1-prod",
+    "wazuh.agent.id": "001",
+    "surf.tenant.id": "vnb-saar",
+    "wazuh.rule.id": "5712",
+    "wazuh.rule.level": 10,
+    "event.severity": 10,
+    "wazuh.rule.description": "sshd: brute force trying to get access to the system.",
+    "wazuh.rule.groups": [
+      "syslog",
+      "sshd",
+      "authentication_failures"
+    ],
+    "source.ip": "203.0.113.9"
+  }
+]

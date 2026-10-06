@@ -1,0 +1,25 @@
+[
+  {
+    "@timestamp": "2026-10-05T13:00:01Z",
+    "event.id": "fx-1",
+    "event.kind": "alert",
+    "event.action": "wazuh_alert",
+    "observer.product": "wazuh",
+    "observer.service": "syscheck",
+    "host.name": "vps1-prod",
+    "wazuh.agent.id": "001",
+    "surf.tenant.id": "vnb-saar",
+    "wazuh.rule.id": "550",
+    "wazuh.rule.level": 7,
+    "event.severity": 7,
+    "event.category": "file",
+    "wazuh.rule.description": "Integrity checksum changed.",
+    "wazuh.rule.groups": [
+      "ossec",
+      "syscheck",
+      "syscheck_entry_modified"
+    ],
+    "file.path": "/opt/surf/.env",
+    "wazuh.syscheck.event": "modified"
+  }
+]

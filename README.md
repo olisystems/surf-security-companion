@@ -20,7 +20,7 @@ Verified at build time (no Docker required):
 | Backend `tsc --noEmit` | ✅ clean |
 | Frontend `tsc --noEmit` + `vite build` | ✅ clean (Mermaid chunk-size advisory only) |
 | Vitest unit + rule tests | ✅ 76 passing |
-| All 20 Sigma rules: schema-valid, positive-match, negative-reject | ✅ pass |
+| All 22 Sigma rules: schema-valid, positive-match, negative-reject | ✅ pass |
 | Sigma → Wazuh XML compile | ✅ pass |
 | NIS2 `.docx` rendering (docxtemplater) | ✅ pass |
 
@@ -215,3 +215,5 @@ Hard-won notes from getting the compose stack running (July 2026):
 - **Postgres crash-loops with `initdb: directory exists but is not empty`?** A volume
   is mounted *inside* `PGDATA`; keep `PGDATA` pointed at a subdirectory
   (`/var/lib/postgresql/data/pgdata`) as configured in `docker-compose.yml`.
+
+- [`docs/WAZUH_AGENT.md`](docs/WAZUH_AGENT.md) — Wazuh agent path (SOC Phase 2b): tunnel, FIM/SCA, alert mirror into the portal.

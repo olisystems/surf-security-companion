@@ -1,0 +1,43 @@
+title: Wazuh high-severity host alert
+id: 6518afc1-cfc7-4685-a699-96690cdcada6
+status: test
+description: >
+  Surfaces every Wazuh manager alert of level 10 or higher raised by an enrolled
+  host agent (SOC Phase 2b: vps1-prod via the WireGuard tunnel) as a portal
+  incident — rootcheck findings, SCA failures of high weight, sshd brute-force
+  correlations, vulnerability hits. The host security agent itself is the
+  sensor here; the closest generic MITRE technique for "the agent raised a
+  high-severity alert about the host" is Impair Defenses (T1562.001), which
+  this rule deliberately reuses as its tag rather than inventing one.
+author: SURF Detection Team
+date: 2026/10/05
+references:
+  - https://attack.mitre.org/techniques/T1562/001/
+  - https://documentation.wazuh.com/current/user-manual/ruleset/rules-classification.html
+tags:
+  - attack.defense_evasion
+  - attack.t1562.001
+  - nis2.art.21.2.b
+level: high
+logsource:
+  product: wazuh
+detection:
+  selection:
+    observer.product: wazuh
+    wazuh.rule.level:
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+  condition: selection
+falsepositives:
+  - Noisy upstream Wazuh rules during the first days of a new agent (tune via level or rule id in alerts.json)
+  - Scheduled SCA scans after an intentional configuration change
+owner: detection-team@surf
+surf.compliance:
+  - "NIS2 Art. 21(2)(b)"
+  - "IEC 62443-3-3 FR6.2"
+  - "KRITIS §8a BSIG"
+  - "ISO 27001 A.8.16"

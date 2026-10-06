@@ -22,6 +22,8 @@
     { "id": "R-18", "title": "Keycloak login failures by source IP", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.1", "kritis": "§8a BSIG", "iso27001": "A.8.5" },
     { "id": "R-19", "title": "SSH login from unknown source", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.1", "kritis": "§8a BSIG", "iso27001": "A.8.20" },
     { "id": "R-20", "title": "HEMS device token lifecycle", "nis2": "Art. 21(2)(b)", "iec62443": "FR1.3", "kritis": "§8a BSIG", "iso27001": "A.8.15" },
+    { "id": "R-21", "title": "Wazuh high-severity host alert", "nis2": "Art. 21(2)(b)", "iec62443": "FR6.2", "kritis": "§8a BSIG", "iso27001": "A.8.16" },
+    { "id": "R-22", "title": "Integrity change in production config or SSH trust", "nis2": "Art. 21(2)(e)", "iec62443": "FR3.4", "kritis": "§8a BSIG", "iso27001": "A.8.9" },
     { "id": "P-01", "title": "OIDC + PKCE + WebAuthn/OTP MFA", "nis2": "Art. 21(2)(j)", "iec62443": "FR1.1/FR1.7", "kritis": "§8a BSIG", "iso27001": "A.8.5" },
     { "id": "P-02", "title": "Tenant-scoped RBAC (surf_tenant_id)", "nis2": "Art. 21(2)(i)", "iec62443": "FR2.1", "kritis": "§8a BSIG", "iso27001": "A.8.3" },
     { "id": "P-03", "title": "Hourly signed Merkle rollups + WORM", "nis2": "Art. 21(2)(h)", "iec62443": "FR3.4", "kritis": "§8a BSIG", "iso27001": "A.8.15" },

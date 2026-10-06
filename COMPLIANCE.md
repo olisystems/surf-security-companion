@@ -30,6 +30,8 @@ and **ISO/IEC 27001:2022 Annex A**.
 | R-18 | Keycloak login failures by source IP | Art. 21(2)(b) | FR1.1 | §8a BSIG | A.8.5 |
 | R-19 | SSH login from unknown source | Art. 21(2)(b) | FR1.1 | §8a BSIG | A.8.20 |
 | R-20 | HEMS device token lifecycle | Art. 21(2)(b) | FR1.3 | §8a BSIG | A.8.15 |
+| R-21 | Wazuh high-severity host alert | Art. 21(2)(b) | FR6.2 | §8a BSIG | A.8.16 |
+| R-22 | Integrity change in production config or SSH trust | Art. 21(2)(e) | FR3.4 | §8a BSIG | A.8.9 |
 | P-01 | OIDC + PKCE + WebAuthn/OTP MFA | Art. 21(2)(j) | FR1.1/FR1.7 | §8a BSIG | A.8.5 |
 | P-02 | Tenant-scoped RBAC (surf_tenant_id) | Art. 21(2)(i) | FR2.1 | §8a BSIG | A.8.3 |
 | P-03 | Hourly signed Merkle rollups + WORM | Art. 21(2)(h) | FR3.4 | §8a BSIG | A.8.15 |

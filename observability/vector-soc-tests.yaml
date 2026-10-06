@@ -1,0 +1,66 @@
+# vector test /etc/vector/vector-soc.yaml /etc/vector/vector-soc-tests.yaml
+tests:
+  - name: wazuh syscheck alert becomes an ECS file event
+    inputs:
+      - insert_at: wazuh_ecs
+        type: log
+        log_fields:
+          message: '{"timestamp":"2026-10-05T13:00:00.123+0000","rule":{"level":7,"description":"Integrity checksum changed.","id":"550","groups":["ossec","syscheck","syscheck_entry_modified"]},"agent":{"id":"001","name":"vps1-prod","ip":"10.44.0.2"},"manager":{"name":"wazuh-manager"},"id":"1759669200.12345","syscheck":{"path":"/opt/surf/.env","event":"modified","mode":"realtime"},"location":"syscheck","full_log":"File /opt/surf/.env modified"}'
+    outputs:
+      - extract_from: wazuh_ecs
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(."observer.product", "wazuh")
+              assert_eq!(."observer.service", "syscheck")
+              assert_eq!(."event.category", "file")
+              assert_eq!(."wazuh.rule.level", 7)
+              assert_eq!(."wazuh.rule.id", "550")
+              assert_eq!(."file.path", "/opt/surf/.env")
+              assert_eq!(."wazuh.syscheck.event", "modified")
+              assert_eq!(."host.name", "vps1-prod")
+              assert_eq!(."event.id", "1759669200.12345")
+              assert!(starts_with(string!(."@timestamp"), "2026-10-05T13:00:00"))
+
+  - name: wazuh level-10 sshd alert carries ip and user
+    inputs:
+      - insert_at: wazuh_ecs
+        type: log
+        log_fields:
+          message: '{"timestamp":"2026-10-05T13:05:00.000+0000","rule":{"level":10,"description":"sshd: brute force trying to get access to the system.","id":"5712","groups":["syslog","sshd","authentication_failures"]},"agent":{"id":"001","name":"vps1-prod"},"id":"1759669500.1","data":{"srcip":"203.0.113.9","dstuser":"root"},"full_log":"Oct  5 13:05:00 SURF sshd[1]: Failed password for root from 203.0.113.9 port 1 ssh2"}'
+    outputs:
+      - extract_from: wazuh_ecs
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(."source.ip", "203.0.113.9")
+              assert_eq!(."user.name", "root")
+              assert_eq!(."observer.service", "syslog")
+              assert_eq!(."event.severity", 10)
+              assert_eq!(."event.category", "host")
+
+  - name: vps2 sshd accepted line
+    inputs:
+      - insert_at: sshd_ecs
+        type: log
+        log_fields:
+          timestamp: "2026-10-05T06:53:17Z"
+          message: 'Oct  5 06:53:17 SURF-DT-Monitoring sshd[1]: Accepted publickey for root from 217.244.216.71 port 1 ssh2: ED25519 SHA256:abc'
+    outputs:
+      - extract_from: sshd_ecs
+        conditions:
+          - type: vrl
+            source: |
+              assert_eq!(."event.action", "ssh_login")
+              assert_eq!(."event.outcome", "success")
+              assert_eq!(."host.name", "vps2")
+              assert_eq!(."source.ip", "217.244.216.71")
+
+  - name: cron line dropped
+    inputs:
+      - insert_at: sshd_ecs
+        type: log
+        log_fields:
+          timestamp: "2026-10-05T06:53:17Z"
+          message: 'Oct  5 06:53:17 SURF-DT-Monitoring CRON[1]: pam_unix(cron:session): session opened for user root'
+    no_outputs_from: [sshd_ecs]
