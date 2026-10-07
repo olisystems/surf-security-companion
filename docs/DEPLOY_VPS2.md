@@ -51,3 +51,14 @@ OpenSearch 9200 wird dann gezielt re-exponiert — nur für 178.104.103.16
   (`docker-compose.prod.yml`); solange die Adresse fehlt, startet Docker den Container neu.
 - Nach `git pull`: `up -d --build --no-deps wazuh-manager vector` (agent.conf-Mount + Mirror),
   dann `agent_control -l` prüfen. Details: `docs/WAZUH_AGENT.md`.
+
+## Backups (since 2026-10-07)
+
+`scripts/backup-soc.sh` runs nightly from root's crontab (`30 3 * * *`, log
+`/var/log/soc-backup.log`) and writes to `/var/backups/soc/` (mode 700, 30-day
+rotation): `pg_<ts>.sql.gz` (all SOC tables: cases, hashchain_ledger,
+audit_actions, playbook_runs, rule_state, saved_queries, tenants) plus tarballs
+of the `wazuh-etc` (ossec.conf, **client.keys** = agent enrolment, shared
+agent.conf), `grafana-data` and `minio-data` volumes. OpenSearch is deliberately
+not included (replayable events). Restore hints are in the script header.
+Run it by hand after any Wazuh/agent change: `bash scripts/backup-soc.sh`.
